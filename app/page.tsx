@@ -9,30 +9,33 @@ const stateDefault = "Default"
 function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange, disabled, carIdentifier, subOptions}: { year: string, make: string, model: string, onYearChange: React.Dispatch<React.SetStateAction<string>>, onMakeChange: React.Dispatch<React.SetStateAction<string>>, onModelChange: React.Dispatch<React.SetStateAction<string>>, disabled: boolean, carIdentifier: string, subOptions: string[] } ) {
   const whichDropDown = carIdentifier === "Year" ? year : (carIdentifier === "Make" ? make : model)
   let displayValue = (whichDropDown === stateDefault) ? carIdentifier : whichDropDown
-  // console.log("State: year " + year + " make " + make + " model " + model + "\n")
-  // console.log(displayValue)
   let dropDownSetter
-  /* TODO: logic to make the setter of year cause others to become disabled*/
   if (carIdentifier === "Year") {
-    /* The onChange should set the year to the e.target.value, and then set the make and model to "" */
+    /* Year's onChange should set the year to the e.target.value, and then set the make and model to "" */
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onYearChange(e.target.value), onMakeChange(stateDefault), onModelChange(stateDefault)}
   } else if (carIdentifier === "Make") {
-    /* The onChange should set the make to the e.target.value, and then set the model to "" */
+    /* Make's onChange should set the make to the e.target.value, and then set the model to "" */
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onMakeChange(e.target.value), onModelChange(stateDefault)}
   } else {
-    /* The onChange should set the model to the e.target.value */
+    /* Model's onChange should set the model to the e.target.value */
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => onModelChange(e.target.value)
   }
   
   return (
-    <select disabled={disabled} onChange={dropDownSetter} value={displayValue}>
-      <option disabled value={carIdentifier} key="disabled option">
-        {carIdentifier}
-      </option>
-      {subOptions.map((subOption, index) => (
-        <option value={subOption} key={subOption}>{subOption}</option>
-      ))}
-    </select>
+    <div className={styles.DropDownContainer}>
+      <label className={styles.Labels}>{carIdentifier}</label>
+      <select className={styles.DropDown} disabled={disabled} onChange={dropDownSetter} value={displayValue}>
+        <option disabled value={carIdentifier} key="disabled option">
+          {carIdentifier}
+        </option>
+        {subOptions.map((subOption, index) => (
+          <option value={subOption} key={subOption}>{subOption}</option>
+        ))}
+      </select>
+      
+    </div>
+    
+    
   )
 }
 
@@ -40,7 +43,7 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
 
 function NextButton({year, make, model}: {year: string, make: string, model: string}) {
   return (
-    <button>Next</button>
+    <button className={styles.NextButton}>Next</button>
   )
 }
 
@@ -70,21 +73,23 @@ function SearchState() {
   /* TODO: add logic to filter models by year and make */
 
   return (
-    <div className="SearchElements">
-      <DropDown disabled={false} carIdentifier="Year" subOptions={YEARS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
-      <DropDown disabled={isMakeDisabled} carIdentifier="Make" subOptions={MAKES} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
-      <DropDown disabled={isModelDisabled} carIdentifier="Model" subOptions={MODELS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
-      <NextButton year={year} make={make} model={model}/>
-    </div>
+      <div className={styles.SearchElements}>
+        <DropDown disabled={false} carIdentifier="Year" subOptions={YEARS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
+        <DropDown disabled={isMakeDisabled} carIdentifier="Make" subOptions={MAKES} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
+        <DropDown disabled={isModelDisabled} carIdentifier="Model" subOptions={MODELS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
+        <NextButton year={year} make={make} model={model}/>
+      </div>
   )
 }
 
 export default function Home() {
   /* state is year, make, model*/
   return (
-    <main className={styles.main}>
-      <div className="top-title">Search For A Vehicle</div>
-      <SearchState />
+    <main className={styles.container}>
+      <div className={styles.searchBox}>
+        <div className={styles.title}>Search For A Vehicle</div>
+        <SearchState />
+      </div>
     </main>
   );
 }
