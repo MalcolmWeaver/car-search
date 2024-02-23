@@ -1,0 +1,40 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px; /* Adjust height as needed */
+    background-color: #1f3e74; /* Blue background color */
+    box-sizing: border-box; /* Ensure padding is included in height */
+}
+  
+.navbarText {
+    padding: 20px 20px 20px 20px;
+    font-family: "Montserrat",sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 28px;
+    color: #ffffff;
+    text-transform: none;
+    margin: 16px 8px;
+}
+  
+.navbarIconContainer {
+    height: 100%;
+    background-color: #1f3e74;
+    margin: 0px 10px 0px 10px;
+    display: flex;
+    align-items: center;
+    /* contents should align vertically */
+
+}
+.navbarIcon {
+   /* max-height: 80px; */
+   height: 64px;
+   width: auto;
+   background-color: #1f3e74;
+}
+
+.body{
+    margin: 0px 0px 0px 0px;
+}
