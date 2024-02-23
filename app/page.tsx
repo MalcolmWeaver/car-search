@@ -24,8 +24,7 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onYearChange(e.target.value)}
   }
 
-  console.log(make, model, year)
-  console.log(carIdentifier)
+
   return (
     <div className={styles.DropDownContainer}>
       <label className={styles.Labels}>{carIdentifier}</label>
