@@ -7,6 +7,7 @@ import cachedData from "@/public/data";
 import Link from "next/link";
 import { unique } from "next/dist/build/utils";
 
+
 const stateDefault = "Default"
 
 function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange, disabled, carIdentifier, subOptions}: { year: string, make: string, model: string, onYearChange: React.Dispatch<React.SetStateAction<string>>, onMakeChange: React.Dispatch<React.SetStateAction<string>>, onModelChange: React.Dispatch<React.SetStateAction<string>>, disabled: boolean, carIdentifier: string, subOptions: string[] } ) {
@@ -24,8 +25,6 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onYearChange(e.target.value)}
   }
 
-  console.log(make, model, year)
-  console.log(carIdentifier)
   return (
     <div className={styles.DropDownContainer}>
       <label className={styles.Labels}>{carIdentifier}</label>
@@ -48,9 +47,14 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
 
 function NextButton({disabled, year, make, model}: {disabled: boolean, year: string, make: string, model: string}) {
   return (
-    <button disabled={disabled} className={styles.NextButton} onClick={() => {location.href= "/" + make + "/" + model + "/" + year;}}>
-      Next
-    </button>
+    // <button disabled={disabled} className={styles.NextButton} onClick={() => {location.href= "/" + make + "/" + model + "/" + year;}}>
+    //   Next
+    // </button>
+    <a href={"/" + make + "/" + model + "/" + year}>
+      <button disabled={disabled} className={styles.NextButton}>
+        Next
+      </button>
+    </a>
   )
 }
 
