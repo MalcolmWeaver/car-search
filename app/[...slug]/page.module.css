@@ -7,8 +7,7 @@
     box-sizing: border-box; /* Ensure padding is included in height */
 }
   
-.navbarText {
-    padding: 20px 20px 20px 20px;
+.navbarText, .pageTitle, .reviewsTitle{
     font-family: "Montserrat",sans-serif;
     font-size: 24px;
     font-weight: 800;
@@ -16,7 +15,39 @@
     line-height: 28px;
     color: #ffffff;
     text-transform: none;
-    margin: 16px 8px;
+    
+}
+
+.navbarText{
+  padding: 20px 20px 20px 20px;
+  margin: 16px 8px;
+}
+.pageTitle{
+  padding: 20px 20px 20px 20px;
+  color: black;
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.reviewsTitle{
+    color: black;
+    margin-bottom: 15px;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.reviewsContainer {
+  padding: 20px; /* Adjust padding as needed */
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+}
+
+.reviewsText {
+  font-size: 14px;
+  color: #000000;
 }
   
 .navbarIconContainer {
@@ -38,3 +69,29 @@
 .body{
     margin: 0px 0px 0px 0px;
 }
+
+.breadcrumbsContainer {
+    display: flex;
+    align-items: center;
+    font-family: "Open Sans",sans-serif,Tahoma,Arial;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 10px 10px 10px 10px;
+  }
+  
+  .breadcrumbsContainer a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s ease;
+  }
+  
+  .breadcrumbsContainer a:hover {
+    color: #0056b3;
+  }
+  
+  .breadcrumbsContainer span {
+    margin: 0 10px;
+    color: #999;
+  }
+  
+  

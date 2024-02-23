@@ -19,13 +19,43 @@ function Navbar() {
   );
 }
 
+function Breadcrumbs({urlSegments}: {urlSegments: string[]} ) {
+  return (
+    <div className={styles.breadcrumbsContainer}>
+      <a href='/'>Home</a>
+      {urlSegments.map((seg, index) => (
+        <div key={seg}>
+          <span>
+            {">"}
+          </span>
+          <a href={'/' + urlSegments.slice(0, index + 1).join('/')}>
+            {seg}
+          </a>
+        </div>
+      ))}
+    </div>
+  )
+}
 
-export default function CarPage({ params }: { params: { slug: string } }) {
+function Reviews() {
+  return (
+    <div className={styles.reviewsContainer}>
+      <div className={styles.reviewsTitle}>Reviews</div>
+      <div className={styles.reviewsText}>Reviews go here</div>
+    </div>
+  )
+}
+
+
+export default function CarPage({ params }: { params: { slug: string[] } }) {
     return (
         <body style={{margin: 0 + "px"}}>
             {/* TODO: find better way to remove margin */}
             <Navbar />
-            <div>Car Page: {params.slug}</div>
+            <Breadcrumbs urlSegments={params.slug}/>
+            <div className={styles.pageTitle}>Car Page:{params.slug.map((seg) => (" "  +seg))}</div>
+            <Reviews />
+            
         </body>
     );
     

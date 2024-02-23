@@ -86,7 +86,7 @@
 }
 
 .NextButton:hover{
-  background-color: #be9a35ab;
+  opacity: 0.7;
 }
 
 .NextButton:disabled {

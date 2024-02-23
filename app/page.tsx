@@ -47,9 +47,6 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
 
 function NextButton({disabled, year, make, model}: {disabled: boolean, year: string, make: string, model: string}) {
   return (
-    // <button disabled={disabled} className={styles.NextButton} onClick={() => {location.href= "/" + make + "/" + model + "/" + year;}}>
-    //   Next
-    // </button>
     <a href={"/" + make + "/" + model + "/" + year}>
       <button disabled={disabled} className={styles.NextButton}>
         Next
