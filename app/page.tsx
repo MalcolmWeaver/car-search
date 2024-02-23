@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import React, { useState } from 'react';
 import cachedData from "@/public/data";
+import Link from "next/link";
 import { unique } from "next/dist/build/utils";
 
 const stateDefault = "Default"
@@ -23,6 +24,8 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onYearChange(e.target.value)}
   }
 
+  console.log(make, model, year)
+  console.log(carIdentifier)
   return (
     <div className={styles.DropDownContainer}>
       <label className={styles.Labels}>{carIdentifier}</label>
@@ -43,9 +46,11 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
 
 /*TODO: find a better way to do keys for enumerations*/
 
-function NextButton({year, make, model}: {year: string, make: string, model: string}) {
+function NextButton({disabled, year, make, model}: {disabled: boolean, year: string, make: string, model: string}) {
   return (
-    <button className={styles.NextButton}>Next</button>
+    <button disabled={disabled} className={styles.NextButton} onClick={() => {location.href= "/" + make + "/" + model + "/" + year;}}>
+      Next
+    </button>
   )
 }
 
@@ -58,6 +63,7 @@ function SearchState() {
   /* Logic for enabling/disabling the next button */
   let isModelDisabled = true;
   let isYearDisabled = true;
+  let isNextDisabled = true;
 
   if (make === stateDefault) {
     isModelDisabled = true;
@@ -69,6 +75,12 @@ function SearchState() {
     isYearDisabled = true;
   } else {
     isYearDisabled = false;
+  }
+
+  if (year === stateDefault){
+    isNextDisabled = true
+  } else {
+    isNextDisabled = false
   }
 
 
@@ -96,7 +108,7 @@ function SearchState() {
         <DropDown disabled={false} carIdentifier="Make" subOptions={MAKES} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
         <DropDown disabled={isModelDisabled} carIdentifier="Model" subOptions={MODELS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
         <DropDown disabled={isYearDisabled} carIdentifier="Year" subOptions={YEARS} year={year} make={make} model={model} onYearChange={setYear} onMakeChange={setMake} onModelChange={setModel}/>
-        <NextButton year={year} make={make} model={model}/>
+        <NextButton disabled={isNextDisabled} year={year} make={make} model={model}/>
       </div>
   )
 }
