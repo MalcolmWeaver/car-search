@@ -6,7 +6,12 @@ const dbPath = './public/carsSqlite.db';
 export const getItemFromDB = (query: string) => {
     const db = new Database(dbPath);
     const dbQuery = query
-    const dbResult: unknown = db.prepare(dbQuery).get();
+    let dbResult: unknown = null
+    try {
+        dbResult = db.prepare(dbQuery).get();
+    } catch (error) {
+        console.log("Failed query with error message: ", error)
+    }
     return dbResult
 }
 
@@ -14,6 +19,11 @@ export const getItemFromDB = (query: string) => {
 export const getAndCacheItemsFromDB = cache((query: string) => {
     const db = new Database(dbPath);
     const dbQuery = query
-    const dbResult: unknown = db.prepare(dbQuery).all();
+    let dbResult: unknown = null
+    try {
+        dbResult = db.prepare(dbQuery).all();
+    } catch (error) {
+        console.log("Failed query with error message: ", error)
+    }
     return dbResult
 })

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { assert } from 'console';
 import Database from 'better-sqlite3';
 import { getItemFromDB } from '@/app/utils';
+import { url } from 'inspector';
 
 const dbPath = './public/carsSqlite.db';
 /* todo: from utils */
@@ -45,7 +46,7 @@ function Breadcrumbs({urlSegments}: {urlSegments: string[]} ) {
 }
 
 function Reviews({urlSegments}: {urlSegments: string[]}) {
-  assert(urlSegments.length === 3, "Invalid URL")
+  
   const make = urlSegments[0].replaceAll("-", " ");
   const model = urlSegments[1].replaceAll("-", " ");
   const year = urlSegments[2];
@@ -81,6 +82,10 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
 
 export default function CarPage({ params }: { params: { slug: string[] } }) {
     // convert url friendly name to space separated
+    const urlSegments = params.slug
+    if(urlSegments.length !== 3){
+      return <div>Invalid Car Page</div>
+    }
     const fullName = params.slug.map(slug => slug.replace(/-/g, " ")).join(' ')
 
     return (
