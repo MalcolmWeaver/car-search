@@ -3,8 +3,11 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '../../public/HomeIcon.png';
 import Link from 'next/link';
-import cachedCarReviews from "@/public/CarReviews";
+// import cachedCarReviews from "@/public/CarReviews";
 import { assert } from 'console';
+import Database from 'better-sqlite3';
+
+const dbPath = './public/carsSqlite.db';
 
 function Navbar() {
   return (
@@ -44,12 +47,36 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
   const make = urlSegments[0].replaceAll("-", " ");
   const model = urlSegments[1].replaceAll("-", " ");
   const year = urlSegments[2];
-  const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
-  /* TODO: fix for tesla model s */
+  // const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
+  
+  const db = new Database(dbPath);
+
+  const testQuery = "SELECT * FROM cars WHERE Make = 'Audi';";
+
+  // Execute the query to fetch table names
+  // const tableNames = db.prepare(testQuery).all();
+  // console.log(tableNames)
+  
+  const reviewQuery = `SELECT Review FROM cars WHERE Year = ${year} AND Make = '${make}' AND Model = '${model}';`
+  const carReviewResult: unknown = db.prepare(reviewQuery).get();
+  let reviewText = "Could Not Find Review";
+  
+  if (typeof carReviewResult === 'object' && carReviewResult !== null) {
+    if ("Review" in carReviewResult) {
+      if (typeof(carReviewResult["Review"]) === "string") {
+        // Safely access properties of carReview
+        reviewText = carReviewResult["Review"]
+      }
+    }
+  } else {
+      // Handle unexpected data format
+      console.log('Unexpected data format for car:', make, model, year);
+  }
+
   return (
     <div className={styles.reviewsContainer}>
       <div className={styles.reviewsTitle}>Reviews</div>
-      <div className={styles.reviewsText}>{car?.Review}</div>
+      <div className={styles.reviewsText}>{reviewText}</div>
     </div>
   )
 }
