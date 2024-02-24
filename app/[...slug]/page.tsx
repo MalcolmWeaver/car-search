@@ -3,6 +3,8 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '../../public/HomeIcon.png';
 import Link from 'next/link';
+import cachedCarReviews from "@/public/CarReviews";
+import { assert } from 'console';
 
 function Navbar() {
   return (
@@ -37,11 +39,17 @@ function Breadcrumbs({urlSegments}: {urlSegments: string[]} ) {
   )
 }
 
-function Reviews() {
+function Reviews({urlSegments}: {urlSegments: string[]}) {
+  assert(urlSegments.length === 3, "Invalid URL")
+  const make = urlSegments[0];
+  const model = urlSegments[1];
+  const year = urlSegments[2];
+  const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
+  /* TODO: fix for tesla model s */
   return (
     <div className={styles.reviewsContainer}>
       <div className={styles.reviewsTitle}>Reviews</div>
-      <div className={styles.reviewsText}>Reviews go here</div>
+      <div className={styles.reviewsText}>{car?.Review}</div>
     </div>
   )
 }
@@ -54,7 +62,7 @@ export default function CarPage({ params }: { params: { slug: string[] } }) {
             <Navbar />
             <Breadcrumbs urlSegments={params.slug}/>
             <div className={styles.pageTitle}>Car Page:{params.slug.map((seg) => (" "  +seg))}</div>
-            <Reviews />
+            <Reviews urlSegments={params.slug}/>
             
         </body>
     );

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import React, { useState } from 'react';
-import cachedData from "@/public/data";
+import cachedCarTypes from "@/public/CarTypes";
 import Link from "next/link";
 import { unique } from "next/dist/build/utils";
 
@@ -24,11 +24,11 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
     /* Year's onChange should set the year to the e.target.value*/
     dropDownSetter = (e: React.ChangeEvent<HTMLSelectElement>) => {onYearChange(e.target.value)}
   }
-
+  // console.log(displayValue)
   return (
     <div className={styles.DropDownContainer}>
       <label className={styles.Labels}>{carIdentifier}</label>
-      <select className={styles.DropDown} disabled={disabled} onChange={dropDownSetter} value={displayValue}>
+      <select defaultValue={displayValue} className={styles.DropDown} disabled={disabled} onChange={dropDownSetter}>
         <option disabled value={carIdentifier} key="disabled option">
           {carIdentifier}
         </option>
@@ -90,19 +90,19 @@ function SearchState() {
     const uniqueMakes = new Set(makes)
     return Array.from(uniqueMakes)
   }
-  let MAKES = getMakes(cachedData)
+  let MAKES = getMakes(cachedCarTypes)
   function getModels(cars : {Year: number|string, Make: string, Model: string}[], make: string) {
     const modelsOfMake = cars.filter((car) => car.Make === make)
     const uniqueModels = new Set(modelsOfMake.map((car) => car.Model))
     return Array.from(uniqueModels)
   }
-  let MODELS = getModels(cachedData, make)
+  let MODELS = getModels(cachedCarTypes, make)
   function getYears(cars: {Year: number|string, Make: string, Model: string}[], make: string, model: string) {
     const yearsOfModel = cars.filter((car) => car.Model === model && car.Make === make)
     const uniqueYears = new Set(yearsOfModel.map((car) => String(car.Year)))
     return Array.from(uniqueYears)
   }
-  let YEARS = getYears(cachedData, make, model)
+  let YEARS = getYears(cachedCarTypes, make, model)
 
   return (
       <div className={styles.SearchElements}>
