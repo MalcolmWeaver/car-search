@@ -58,15 +58,14 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
   // console.log(tableNames)
   
   const reviewQuery = `SELECT Review FROM cars WHERE Year = ${year} AND Make = '${make}' AND Model = '${model}';`
-  console.log(reviewQuery)
   const carReviewResult: unknown = db.prepare(reviewQuery).get();
   let reviewText = "Could Not Find Review";
+  
   if (typeof carReviewResult === 'object' && carReviewResult !== null) {
     if ("Review" in carReviewResult) {
       if (typeof(carReviewResult["Review"]) === "string") {
         // Safely access properties of carReview
         reviewText = carReviewResult["Review"]
-        console.log(reviewText)
       }
     }
   } else {
