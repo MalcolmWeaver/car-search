@@ -41,8 +41,8 @@ function Breadcrumbs({urlSegments}: {urlSegments: string[]} ) {
 
 function Reviews({urlSegments}: {urlSegments: string[]}) {
   assert(urlSegments.length === 3, "Invalid URL")
-  const make = urlSegments[0];
-  const model = urlSegments[1];
+  const make = urlSegments[0].replaceAll("-", " ");
+  const model = urlSegments[1].replaceAll("-", " ");
   const year = urlSegments[2];
   const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
   /* TODO: fix for tesla model s */
@@ -56,14 +56,16 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
 
 
 export default function CarPage({ params }: { params: { slug: string[] } }) {
+    // convert url friendly name to space separated
+    const fullName = params.slug.map(slug => slug.replace(/-/g, " ")).join(' ')
+
     return (
         <body style={{margin: 0 + "px"}}>
             {/* TODO: find better way to remove margin */}
             <Navbar />
             <Breadcrumbs urlSegments={params.slug}/>
-            <div className={styles.pageTitle}>Car Page:{params.slug.map((seg) => (" "  +seg))}</div>
-            <Reviews urlSegments={params.slug}/>
-            
+            <div className={styles.pageTitle}>Car Page: {fullName}</div>
+            <Reviews urlSegments={params.slug}/>  
         </body>
     );
     

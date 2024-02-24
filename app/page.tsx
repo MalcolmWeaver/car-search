@@ -46,8 +46,11 @@ function DropDown( {year, make, model, onYearChange, onMakeChange, onModelChange
 /*TODO: find a better way to do keys for enumerations*/
 
 function NextButton({disabled, year, make, model}: {disabled: boolean, year: string, make: string, model: string}) {
+  let urlAppropriateMake = make.replaceAll(" ", "-")
+  let urlAppropriateModel = model.replaceAll(" ", "-")
+  
   return (
-    <a href={"/" + make + "/" + model + "/" + year}>
+    <a href={"/" + urlAppropriateMake + "/" + urlAppropriateModel + "/" + year}>
       <button disabled={disabled} className={styles.NextButton}>
         Next
       </button>
