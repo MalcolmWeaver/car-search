@@ -3,11 +3,19 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '../../public/HomeIcon.png';
 import Link from 'next/link';
-// import cachedCarReviews from "@/public/CarReviews";
 import { assert } from 'console';
 import Database from 'better-sqlite3';
+import cachedCarTypes from '@/public/CarTypes';
 
 const dbPath = './public/carsSqlite.db';
+
+export async function generateStaticParams() {
+  const possibleCarTypes = cachedCarTypes.map((car) => ({
+    slug: [car.Make.replaceAll(" ", "-"), car.Model.replaceAll(" ", "-"), car.Year.toString()]
+  }))
+  console.log(possibleCarTypes)
+  return possibleCarTypes
+}
 
 function Navbar() {
   return (
@@ -85,7 +93,7 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
 export default function CarPage({ params }: { params: { slug: string[] } }) {
     // convert url friendly name to space separated
     const fullName = params.slug.map(slug => slug.replace(/-/g, " ")).join(' ')
-
+    console.log(fullName)
     return (
         <body style={{margin: 0 + "px"}}>
             {/* TODO: find better way to remove margin */}
