@@ -1,13 +1,15 @@
 import React from 'react';
 import styles from './page.module.css';
 import Image from 'next/image';
-import homeIcon from '../../public/HomeIcon.png';
+import homeIcon from '@/public/HomeIcon.png';
 import Link from 'next/link';
 // import cachedCarReviews from "@/public/CarReviews";
 import { assert } from 'console';
 import Database from 'better-sqlite3';
+import { getItemFromDB } from '@/app/utils';
 
 const dbPath = './public/carsSqlite.db';
+/* todo: from utils */
 
 function Navbar() {
   return (
@@ -49,16 +51,11 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
   const year = urlSegments[2];
   // const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
   
-  const db = new Database(dbPath);
-
-  const testQuery = "SELECT * FROM cars WHERE Make = 'Audi';";
-
-  // Execute the query to fetch table names
-  // const tableNames = db.prepare(testQuery).all();
-  // console.log(tableNames)
+  // const db = new Database(dbPath);
   
   const reviewQuery = `SELECT Review FROM cars WHERE Year = ${year} AND Make = '${make}' AND Model = '${model}';`
-  const carReviewResult: unknown = db.prepare(reviewQuery).get();
+  const carReviewResult = getItemFromDB(reviewQuery);
+  // const carReviewResult: unknown = db.prepare(reviewQuery).get();
   let reviewText = "Could Not Find Review";
   
   if (typeof carReviewResult === 'object' && carReviewResult !== null) {
