@@ -3,12 +3,12 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '@/public/HomeIcon.png';
 import Link from 'next/link';
-// import cachedCarReviews from "@/public/CarReviews";
 import { assert } from 'console';
 import Database from 'better-sqlite3';
 import { getItemFromDB } from '@/app/utils';
 import { url } from 'inspector';
 
+const findFailMsg = "Failed to find item from database";
 const dbPath = './public/carsSqlite.db';
 /* todo: from utils */
 
@@ -50,24 +50,25 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
   const make = urlSegments[0].replaceAll("-", " ");
   const model = urlSegments[1].replaceAll("-", " ");
   const year = urlSegments[2];
-  // const car = cachedCarReviews.find(element => element.Make === make && element.Model === model && element.Year === parseInt(year));
+
+  const reviewQuery =
+    `SELECT Review FROM cars
+    WHERE Year = ${year} 
+    AND Make = '${make}' 
+    AND Model = '${model}';`;
+
   
-  // const db = new Database(dbPath);
-  
-  const reviewQuery = `SELECT Review FROM cars WHERE Year = ${year} AND Make = '${make}' AND Model = '${model}';`
   const carReviewResult = getItemFromDB(reviewQuery);
-  // const carReviewResult: unknown = db.prepare(reviewQuery).get();
-  let reviewText = "Could Not Find Review";
+
+  let reviewText = findFailMsg;
   
   if (typeof carReviewResult === 'object' && carReviewResult !== null) {
     if ("Review" in carReviewResult) {
       if (typeof(carReviewResult["Review"]) === "string") {
-        // Safely access properties of carReview
         reviewText = carReviewResult["Review"]
       }
     }
   } else {
-      // Handle unexpected data format
       console.log('Unexpected data format for car:', make, model, year);
   }
 

@@ -1,14 +1,14 @@
 import { cache } from 'react'
 import Database from 'better-sqlite3';
+import { sql } from '@vercel/postgres';
 
 const dbPath = './public/carsSqlite.db';
+const db = new Database(dbPath);
 
 export const getItemFromDB = (query: string) => {
-    const db = new Database(dbPath);
-    const dbQuery = query
     let dbResult: unknown = null
     try {
-        dbResult = db.prepare(dbQuery).get();
+        dbResult = db.prepare(query).get();
     } catch (error) {
         console.log("Failed query with error message: ", error)
     }
@@ -17,11 +17,9 @@ export const getItemFromDB = (query: string) => {
 
 /* TODO: Make async*/
 export const getAndCacheItemsFromDB = cache((query: string) => {
-    const db = new Database(dbPath);
-    const dbQuery = query
     let dbResult: unknown = null
     try {
-        dbResult = db.prepare(dbQuery).all();
+        dbResult = db.prepare(query).all();
     } catch (error) {
         console.log("Failed query with error message: ", error)
     }
