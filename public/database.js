@@ -1,4 +1,5 @@
 import Database from 'better-sqlite3';
+import {sql} from '@vercel/postgres';
 
 // Create or open a database file
 // must be run from inside /car-search
@@ -18,10 +19,6 @@ const createTableQuery = `
 // Run the SQL query
 db.exec(createTableQuery);
 
-// Export the database instance
-export default db;
-
-import cachedCarReviews from './CarReviews.js';
 
 // If you want to populate it from a file, uncomment this
 // const db = new Database('./public/carsSqlite.db');
@@ -41,3 +38,6 @@ import cachedCarReviews from './CarReviews.js';
 // });
 
 // db.close();
+
+
+

@@ -1,22 +1,26 @@
 import styles from "@/app/page.module.css";
 import SearchState from "./pageClientSideComponents";
-import { getAndCacheItemsFromDB } from "@/app/utils";
+import { getCars  } from "@/app/utils";
 
-export default function Home() {
-  
+export type CarType = { year: string | number;
+                make: string; 
+                model: string; };
+
+export default async function Home() {
   /* Data For Home Search */
-  const carKeysQuery = `SELECT Year, Make, Model FROM cars`
-  const carTypesResult = getAndCacheItemsFromDB(carKeysQuery)
+  const carsResponse = await getCars();
+  const cars = carsResponse.rows
 
-  type CarType = { Year: string | number;
-                   Make: string; 
-                  Model: string; };
-  let typedCar: CarType[] = [];
   
-  if (Array.isArray(carTypesResult) && 
-      carTypesResult.every((car: any) => typeof car.Year === 'string' 
-                                      || typeof car.Year === 'number')) {
-      typedCar = carTypesResult as CarType[];
+  let typedCars: CarType[] = [];
+  
+  if (Array.isArray(cars)){
+    cars.map((car: any) => {
+      if (typeof (car.year === 'string' || typeof car.year === 'number') 
+          && typeof car.make === 'string' && typeof car.model === 'string') {
+        typedCars.push({year: car.year, make: car.make, model: car.model});
+      }
+    })
   } else {
       console.error('Invalid car types data structure.');
   }
@@ -25,7 +29,7 @@ export default function Home() {
     <main className={styles.container}>
       <div className={styles.searchBox}>
         <div className={styles.title}>Search For A Vehicle</div>
-        <SearchState carTypes={typedCar}/>
+        <SearchState carTypes={typedCars}/>
       </div>
     </main>
   );

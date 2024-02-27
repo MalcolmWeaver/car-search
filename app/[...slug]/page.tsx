@@ -3,14 +3,10 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '@/public/HomeIcon.png';
 import Link from 'next/link';
-import { assert } from 'console';
-import Database from 'better-sqlite3';
-import { getItemFromDB } from '@/app/utils';
-import { url } from 'inspector';
+import { getReview } from '@/app/utils';
 
 const findFailMsg = "Failed to find item from database";
 const dbPath = './public/carsSqlite.db';
-/* todo: from utils */
 
 function Navbar() {
   return (
@@ -45,27 +41,20 @@ function Breadcrumbs({urlSegments}: {urlSegments: string[]} ) {
   )
 }
 
-function Reviews({urlSegments}: {urlSegments: string[]}) {
+async function Reviews({urlSegments}: {urlSegments: string[]}) {
   
   const make = urlSegments[0].replaceAll("-", " ");
   const model = urlSegments[1].replaceAll("-", " ");
   const year = urlSegments[2];
 
-  const reviewQuery =
-    `SELECT Review FROM cars
-    WHERE Year = ${year} 
-    AND Make = '${make}' 
-    AND Model = '${model}';`;
-
-  
-  const carReviewResult = getItemFromDB(reviewQuery);
+  const carReviewResult = await getReview(year, make, model);
 
   let reviewText = findFailMsg;
   
   if (typeof carReviewResult === 'object' && carReviewResult !== null) {
-    if ("Review" in carReviewResult) {
-      if (typeof(carReviewResult["Review"]) === "string") {
-        reviewText = carReviewResult["Review"]
+    if ("review" in carReviewResult) {
+      if (typeof(carReviewResult["review"]) === "string") {
+        reviewText = carReviewResult["review"]
       }
     }
   } else {
@@ -81,7 +70,7 @@ function Reviews({urlSegments}: {urlSegments: string[]}) {
 }
 
 
-export default function CarPage({ params }: { params: { slug: string[] } }) {
+export default async function CarPage({ params }: { params: { slug: string[] } }) {
     // convert url friendly name to space separated
     const urlSegments = params.slug
     if(urlSegments.length !== 3){

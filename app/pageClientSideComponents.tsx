@@ -3,9 +3,7 @@
 import Image from "next/image";
 import styles from "@/app/page.module.css";
 import React, { useState } from 'react';
-import cachedCarTypes from "@/public/CarTypes";
-import Link from "next/link";
-import { unique } from "next/dist/build/utils";
+import { CarType } from "./page";
 
 
 const stateDefault = "Default"
@@ -58,7 +56,7 @@ function NextButton({disabled, year, make, model}: {disabled: boolean, year: str
   )
 }
 
-export default  function SearchState({carTypes}: {carTypes: {Year: number|string, Make: string, Model: string}[]}) {
+export default  function SearchState({carTypes}: {carTypes: CarType[]}) {
   /* Component made for holding the state (year, make, model)*/
   const [year, setYear] = useState(stateDefault);
   const [make, setMake] = useState(stateDefault);
@@ -89,22 +87,22 @@ export default  function SearchState({carTypes}: {carTypes: {Year: number|string
 
   /* Filtering logic is done locally here to avoid db queries. Car model data is cached */
 
-  function getMakes(cars: {Year: number|string, Make: string, Model: string}[]) {
-    const makes = cars.map((car) => car.Make)
+  function getMakes(cars: CarType[]) {
+    const makes = cars.map((car) => car.make)
     const uniqueMakes = new Set(makes)
     return Array.from(uniqueMakes)
   }
 
   let MAKES = getMakes(carTypes)
-  function getModels(cars : {Year: number|string, Make: string, Model: string}[], make: string) {
-    const modelsOfMake = cars.filter((car) => car.Make === make)
-    const uniqueModels = new Set(modelsOfMake.map((car) => car.Model))
+  function getModels(cars : CarType[], make: string) {
+    const modelsOfMake = cars.filter((car) => car.make === make)
+    const uniqueModels = new Set(modelsOfMake.map((car) => car.model))
     return Array.from(uniqueModels)
   }
   let MODELS = getModels(carTypes, make)
-  function getYears(cars: {Year: number|string, Make: string, Model: string}[], make: string, model: string) {
-    const yearsOfModel = cars.filter((car) => car.Model === model && car.Make === make)
-    const uniqueYears = new Set(yearsOfModel.map((car) => String(car.Year)))
+  function getYears(cars: CarType[], make: string, model: string) {
+    const yearsOfModel = cars.filter((car) => car.model === model && car.make === make)
+    const uniqueYears = new Set(yearsOfModel.map((car) => String(car.year)))
     return Array.from(uniqueYears)
   }
   let YEARS = getYears(carTypes, make, model)
