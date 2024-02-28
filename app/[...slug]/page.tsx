@@ -3,7 +3,8 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import homeIcon from '@/public/HomeIcon.png';
 import Link from 'next/link';
-import { getReview } from '@/app/utils';
+import { getReview, getLatestYear } from '@/app/utils';
+import { url } from 'inspector';
 
 const findFailMsg = "Failed to find item from database";
 const dbPath = './public/carsSqlite.db';
@@ -73,10 +74,26 @@ async function Reviews({urlSegments}: {urlSegments: string[]}) {
 export default async function CarPage({ params }: { params: { slug: string[] } }) {
     // convert url friendly name to space separated
     const urlSegments = params.slug
-    if(urlSegments.length !== 3){
+    let fullName = ""
+    let urlSegmentList = []
+    if(urlSegments.length !== 3 && urlSegments.length !== 2) {
       return <div>Invalid Car Page</div>
     }
-    const fullName = params.slug.map(slug => slug.replace(/-/g, " ")).join(' ')
+    if(urlSegments.length === 2) {
+      const fullNameArray = params.slug.map(slug => slug.replace(/-/g, " "));
+      console.log(fullNameArray)
+      const year = await getLatestYear(fullNameArray[0], fullNameArray[1]);
+      fullName = year + " " + fullNameArray[0] + " " + fullNameArray[1];
+      urlSegmentList = params.slug
+      urlSegmentList.push(year.toString());
+      console.log(urlSegmentList)
+    }
+    else{
+      fullName = params.slug.map(slug => slug.replace(/-/g, " ")).join(' ')
+      urlSegmentList = params.slug
+      console.log(urlSegmentList)
+    }
+    console.log(fullName)
 
     return (
         <body style={{margin: 0 + "px"}}>
@@ -84,7 +101,7 @@ export default async function CarPage({ params }: { params: { slug: string[] } }
             <Navbar />
             <Breadcrumbs urlSegments={params.slug}/>
             <div className={styles.pageTitle}>Car Page: {fullName}</div>
-            <Reviews urlSegments={params.slug}/>  
+            <Reviews urlSegments={urlSegmentList}/>  
         </body>
     );
     

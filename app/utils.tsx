@@ -59,13 +59,21 @@ export const getReview = async (year: string | number, make : string, model : st
     // refer to https://stackoverflow.com/a/76864573
 
     let query = `SELECT Review FROM cars WHERE year = $1 AND make = $2 AND model = $3;`;
-    const params = [year, make, model]
+    const yearAsInt = parseInt(year.toString(), 10)
+    const params = [yearAsInt, make, model]
     const reviewsReturn = await sql.query(query, params)
     if (reviewsReturn.rows.length !== 1) {
         console.log("Non unique (possibly empty) result for query: ", query, params);
         return null
     }
     return reviewsReturn.rows[0]
+}
+
+export const getLatestYear = async (make: string, model: string) => {
+    const latestYearResult = await sql `SELECT MAX(year) FROM cars WHERE make = ${make} AND model = ${model};`;
+    const yearAsInt = latestYearResult.rows[0].max
+    console.log(yearAsInt)
+    return yearAsInt
 }
 
 export const getItemFromDB_SqliteDeprecated = (query: string) => {
