@@ -49,9 +49,9 @@ export const migrateSqliteToVercelDB = async () => {
 
 export const getCars = async () => {
     // must change literal to update vercel
-    const cars = await sql`SELECT year, make, model From cars`
-    // console.log(cars)
-    return cars
+    const carsResult = await sql`Select year, make, model from cars`
+    console.log(carsResult)
+    return carsResult
 }
 
 export const getReview = async (year: string | number, make : string, model : string) => {
